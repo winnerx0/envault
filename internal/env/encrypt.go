@@ -6,7 +6,10 @@ import (
 	"crypto/rand"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
+	"path/filepath"
+	"regexp"
 
 	"golang.org/x/crypto/argon2"
 )
@@ -17,57 +20,88 @@ func DeriveKey(passphrase string, salt []byte) []byte {
 
 func EncryptFile(inputfile string, outputfile string, passphase string) error {
 
-	plaintext, err := os.ReadFile(inputfile)
+	dir, err := os.Getwd()
 
 	if err != nil {
 		return err
 	}
 
-	salt := make([]byte, 16)
+	regex := regexp.MustCompile(".env.*")
 
-	if _, err := io.ReadFull(rand.Reader, salt); err != nil {
-		return err
-	}
+	err = filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
 
-	key := DeriveKey(passphase, salt)
+		if err != nil {
+			return nil
+		}
 
-	block, err := aes.NewCipher(key)
+		if path == dir {
+			return nil
+		}
+
+		
+		if !regex.MatchString(d.Name()) {
+			return nil
+		}
+		
+		fmt.Println("name", path)
+
+		plaintext, err := os.ReadFile(path)
+
+		if err != nil {
+			return err
+		}
+
+		salt := make([]byte, 16)
+
+		if _, err := io.ReadFull(rand.Reader, salt); err != nil {
+			return err
+		}
+
+		key := DeriveKey(passphase, salt)
+
+		block, err := aes.NewCipher(key)
+
+		if err != nil {
+			return err
+		}
+
+		gcm, err := cipher.NewGCM(block)
+
+		if err != nil {
+			return err
+		}
+
+		nonce := make([]byte, gcm.NonceSize())
+
+		if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
+			return err
+		}
+
+		ciphertext := gcm.Seal(nil, nonce, plaintext, nil)
+
+		outfile, err := os.Create(path + ".enc")
+
+		if err != nil {
+			return err
+		}
+
+		defer outfile.Close()
+
+		if _, err := outfile.Write(salt); err != nil {
+			return err
+		}
+		if _, err := outfile.Write(nonce); err != nil {
+			return err
+		}
+		if _, err := outfile.Write(ciphertext); err != nil {
+			return err
+		}
+
+		return nil
+
+	})
 
 	if err != nil {
-		return err
-	}
-
-	gcm, err := cipher.NewGCM(block)
-
-	if err != nil {
-		return err
-	}
-
-	nonce := make([]byte, gcm.NonceSize())
-
-	if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
-		return err
-	}
-
-	fmt.Println("nonce", string(nonce))
-
-	ciphertext := gcm.Seal(nil, nonce, plaintext, nil)
-
-	outfile, err := os.Create(outputfile)
-
-	if err != nil {
-		return err
-	}
-
-	defer outfile.Close()
-
-	if _, err := outfile.Write(salt); err != nil {
-		return err
-	}
-	if _, err := outfile.Write(nonce); err != nil {
-		return err
-	}
-	if _, err := outfile.Write(ciphertext); err != nil {
 		return err
 	}
 
