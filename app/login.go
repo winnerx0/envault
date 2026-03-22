@@ -2,8 +2,10 @@ package app
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
+	"github.com/winnerx0/envault/internal/config"
 	"github.com/winnerx0/envault/internal/env"
 )
 
@@ -12,11 +14,19 @@ var loginCmd = &cobra.Command{
 	Short: "Login to envault",
 	Long:  "Login to envault",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		password, _ := cmd.Flags().GetString("password")
+		password, err := cmd.Flags().GetString("password")
+		
+		if err != nil {
+			return err
+		}
 
-		fmt.Println("password", password)
+		root, err := config.FindProjectRoot()
+		if err != nil {
+			return err
+		}
+		fmt.Println("Project root:", filepath.Base(root))
 
-		env.EncryptFile(".env", ".env.env", password)
+		env.EncryptFile(password)
 		return nil
 	},
 }
