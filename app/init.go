@@ -1,20 +1,13 @@
 package app
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 
 	"github.com/spf13/cobra"
+	"github.com/winnerx0/envault/internal/config"
 )
-
-const configFileName = "envault.json"
-
-type Config struct {
-	Name    string `json:"name"`
-	Version string `json:"version"`
-}
 
 var initCmd = &cobra.Command{
 	Use:   "init",
@@ -26,24 +19,18 @@ var initCmd = &cobra.Command{
 			return err
 		}
 
-		configPath := filepath.Join(dir, configFileName)
+		configPath := filepath.Join(dir, config.FileName)
 
 		if _, err := os.Stat(configPath); err == nil {
 			return fmt.Errorf("envault.json already exists in this directory")
 		}
 
-		config := Config{
+		cfg := &config.Config{
 			Name:    filepath.Base(dir),
 			Version: "1.0",
 		}
 
-		data, err := json.MarshalIndent(config, "", "  ")
-		
-		if err != nil {
-			return err
-		}
-
-		if err := os.WriteFile(configPath, data, 0644); err != nil {
+		if err := config.Save(dir, cfg); err != nil {
 			return err
 		}
 
