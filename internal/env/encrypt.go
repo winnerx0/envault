@@ -18,25 +18,27 @@ func DeriveKey(passphrase string, salt []byte) []byte {
 	return argon2.IDKey([]byte(passphrase), salt, 3, 32*1024, 4, 32)
 }
 
-func EncryptFile(passphrase string) error {
+type EncryptedFile struct {
+	Path string // relative path from project root
+	Data []byte // encrypted content (salt + nonce + ciphertext)
+}
 
+func Encrypt(passphrase string) ([]EncryptedFile, error) {
 	dir, err := config.FindProjectRoot()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	regex := regexp.MustCompile(`^\.env.*`)
+	var results []EncryptedFile
 
 	err = filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
-
 		if err != nil {
 			return err
 		}
-
 		if d.IsDir() {
 			return nil
 		}
-
 		if !regex.MatchString(d.Name()) {
 			return nil
 		}
@@ -66,18 +68,21 @@ func EncryptFile(passphrase string) error {
 
 		ciphertext := gcm.Seal(nil, nonce, plaintext, nil)
 
-		outfile, err := os.OpenFile(path+".enc", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)
-		if err != nil {
-			return err
-		}
+		var buf []byte
+		buf = append(buf, salt...)
+		buf = append(buf, nonce...)
+		buf = append(buf, ciphertext...)
 
-		outfile.Write(salt)
-		outfile.Write(nonce)
-		outfile.Write(ciphertext)
-
-		outfile.Close()
+		rel, _ := filepath.Rel(dir, path)
+		results = append(results, EncryptedFile{
+			Path: rel,
+			Data: buf,
+		})
 
 		return nil
 	})
-	return err
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
 }
