@@ -3,27 +3,26 @@ package env
 import (
 	"crypto/aes"
 	"crypto/cipher"
-	"fmt"
 )
 
-func DencryptFile(encrypted []byte, passphase string) error {
+func DencryptFile(encrypted []byte, passphrase string) (string, error) {
 
 	saltSize := 16
 
 	salt := encrypted[:saltSize]
 
-	key := DeriveKey(passphase, salt)
+	key := DeriveKey(passphrase, salt)
 
 	block, err := aes.NewCipher(key)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	gcm, err := cipher.NewGCM(block)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	nonceSize := gcm.NonceSize()
@@ -35,10 +34,8 @@ func DencryptFile(encrypted []byte, passphase string) error {
 	plaintext, err := gcm.Open(nil, nonce, cipherText, nil)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	fmt.Println(string(plaintext))
-
-	return nil
+	return string(plaintext), nil
 }
