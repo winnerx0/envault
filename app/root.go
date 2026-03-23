@@ -11,10 +11,6 @@ var rootCmd = &cobra.Command{
 	Use:   "envault",
 	Short: "An env tool",
 	Long:  "env syncing",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("Hello from root command")
-		return nil
-	},
 }
 
 func Execute() {
