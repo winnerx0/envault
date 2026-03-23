@@ -22,11 +22,18 @@ var httpClient = http.Client{}
 
 var backupCmd = &cobra.Command{
 	Use:   "backup",
-	Short: "Backup envs",
+	Short: "Backup env files",
 	Long:  "Backup encrypted environment variable files to a private github repository",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		
 		root, err := config.FindProjectRoot()
+		
+		if err != nil {
+			return err
+		}
+		
+		cfg, err := config.Load(root)
+		
 		if err != nil {
 			return err
 		}
@@ -91,7 +98,7 @@ var backupCmd = &cobra.Command{
 		}
 
 		// Create commit with parent
-		commitSHA, err := createCommit(token, fullRepo, treeSHA, parentSHA, "backup encrypted env files")
+		commitSHA, err := createCommit(token, fullRepo, treeSHA, parentSHA, fmt.Sprintf("backup encrypted env files for %s", cfg.Name))
 		if err != nil {
 			return err
 		}
