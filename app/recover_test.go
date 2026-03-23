@@ -72,7 +72,12 @@ func Test_fetchEntries_nestedDirs(t *testing.T) {
 	defer srv.Close()
 
 	// Verify the server responds correctly for both calls
-	resp1, _ := http.Get(srv.URL)
+	resp1, err := http.Get(srv.URL)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	defer resp1.Body.Close()
 	var body1 ResponseBody
 	json.NewDecoder(resp1.Body).Decode(&body1)
@@ -84,7 +89,12 @@ func Test_fetchEntries_nestedDirs(t *testing.T) {
 		t.Fatalf("expected first entry to be dir, got %q", body1.Entries[0].ContentType)
 	}
 
-	resp2, _ := http.Get(srv.URL)
+	resp2, err := http.Get(srv.URL)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	defer resp2.Body.Close()
 	var body2 ResponseBody
 	json.NewDecoder(resp2.Body).Decode(&body2)
@@ -104,7 +114,11 @@ func Test_fetchEntries_errorResponse(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	resp, _ := http.Get(srv.URL)
+	resp, err := http.Get(srv.URL)
+
+	if err != nil {
+		t.Fatal(err)
+	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 404 {
