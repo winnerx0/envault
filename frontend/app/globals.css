@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #091520;
+  --surface: #0d1e2e;
+  --border: #1c3d5c;
+  --text: #c8dff0;
+  --muted: #5a7d99;
+  --accent: #4db8ff;
+  --accent-warm: #ff7043;
+  --accent-dim: rgba(77, 184, 255, 0.07);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  /* Blueprint graph-paper grid */
+  background-image:
+    radial-gradient(circle, rgba(77, 184, 255, 0.18) 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: var(--text);
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Soft top glow */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 400px;
+  background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(77, 184, 255, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Terminal window — blueprint instrument panel style */
+.terminal {
+  background: #060f18;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    0 0 0 1px rgba(77, 184, 255, 0.06),
+    0 4px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Blueprint corner brackets */
+.terminal::before,
+.terminal::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  z-index: 10;
+  pointer-events: none;
+}
+.terminal::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid var(--accent);
+  border-left: 2px solid var(--accent);
+}
+.terminal::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid var(--accent);
+  border-right: 2px solid var(--accent);
+}
+
+.terminal-chrome {
+  background: #0b1a28;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.terminal-body {
+  padding: 20px 24px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+/* Staggered terminal line animations */
+@keyframes lineReveal {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px rgba(77, 184, 255, 0.8); }
+  50% { opacity: 0; box-shadow: none; }
+}
+
+.term-line {
+  opacity: 0;
+  animation: lineReveal 0.2s ease forwards;
+}
+
+.term-line:nth-child(1)  { animation-delay: 0.4s; }
+.term-line:nth-child(2)  { animation-delay: 0.9s; }
+.term-line:nth-child(3)  { animation-delay: 1.4s; }
+.term-line:nth-child(4)  { animation-delay: 1.9s; }
+.term-line:nth-child(5)  { animation-delay: 2.4s; }
+.term-line:nth-child(6)  { animation-delay: 2.9s; }
+.term-line:nth-child(7)  { animation-delay: 3.4s; }
+.term-line:nth-child(8)  { animation-delay: 3.9s; }
+
+.cursor-blink {
+  display: inline-block;
+  width: 8px;
+  height: 14px;
+  background: var(--accent);
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: cursorBlink 1s step-end infinite;
+  opacity: 0;
+  animation-delay: 4.5s;
+}
+
+/* Section fade-in */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.fade-up-1 { animation-delay: 0.1s; opacity: 0; }
+.fade-up-2 { animation-delay: 0.25s; opacity: 0; }
+.fade-up-3 { animation-delay: 0.4s; opacity: 0; }
+.fade-up-4 { animation-delay: 0.55s; opacity: 0; }
+
+/* Blueprint annotation label — horizontal rules flanking text */
+.blueprint-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.blueprint-label::before,
+.blueprint-label::after {
+  content: '';
+  display: block;
+  height: 1px;
+  width: 24px;
+  background: var(--accent);
+  opacity: 0.45;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* Selection */
+::selection {
+  background: rgba(77, 184, 255, 0.2);
+  color: var(--text);
+}
