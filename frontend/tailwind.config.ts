@@ -8,9 +8,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ["'Roboto'", "sans-serif"],
-        sans: ["'Roboto'", "sans-serif"],
-        mono: ["'Roboto Mono'", "monospace"],
+        display: ["'Outfit'", "sans-serif"],
+        sans:    ["'Outfit'", "sans-serif"],
+        mono:    ["'JetBrains Mono'", "monospace"],
       },
     },
   },

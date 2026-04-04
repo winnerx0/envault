@@ -4,6 +4,14 @@ A CLI tool that encrypts `.env` files and backs them up to a private GitHub repo
 
 ## Install
 
+The quickest way — downloads the right binary for your OS and installs it to `/usr/local/bin`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/winnerx0/envault/main/install.sh | sh
+```
+
+Or via Go:
+
 ```bash
 go install github.com/winnerx0/envault/cmd/envault@latest
 ```
@@ -15,6 +23,21 @@ git clone https://github.com/winnerx0/envault.git
 cd envault
 go build -o envault ./cmd/envault
 ```
+
+### Binary releases
+
+Pre-built binaries are attached to each [GitHub release](https://github.com/winnerx0/envault/releases):
+
+| Platform | File |
+|----------|------|
+| Linux x86-64 | `envault_linux_amd64` |
+| Linux x86-64 (alt) | `envault_linux_x86_64` |
+| macOS Intel | `envault_darwin_amd64` |
+| Windows x86-64 | `envault_windows_amd64.exe` |
+
+## Requirements
+
+A GitHub personal access token with **`repo` scope** is required for `envault login`. It is used to create the private backup repository and push encrypted files via the Git Data API.
 
 ## Quick start
 
@@ -74,7 +97,7 @@ Downloads encrypted `.env` files from the private GitHub repo and decrypts them 
 envault recover
 ```
 
-This fetches all `.enc` files for the current project from the backup repo, decrypts them using the passphrase in `~/.envault/config.yaml`, and writes the original `.env` files back to their original paths.
+Fetches all `.enc` files for the current project from the backup repo, decrypts them using the passphrase in `~/.envault/config.yaml`, and writes the original `.env` files back to their original paths.
 
 ## Configuration
 
@@ -103,14 +126,17 @@ Created by `envault init` in the project root.
 
 1. **Login** saves your passphrase and GitHub token to `~/.envault/config.yaml` and creates a private repo via the GitHub API
 2. **Init** creates `envault.json` in the current directory, marking it as the project root
-3. **Backup** walks the project root for `.env*` files, encrypts each one with AES-256-GCM (key derived via Argon2), and pushes the encrypted bytes to GitHub using the Git Data API
+3. **Backup** walks the project root for `.env*` files, encrypts each one with AES-256-GCM (key derived via Argon2id), and pushes the encrypted bytes to GitHub using the Git Data API
 4. **Recover** fetches the encrypted files from the GitHub repo using the Contents API, decrypts them, and restores the original `.env` files
 
 ## Encryption
 
-- **Key derivation:** Argon2id (3 iterations, 32 MB memory, 4 threads)
-- **Cipher:** AES-256-GCM
-- Each file gets a unique random 16-byte salt and nonce
+- **Key derivation:** Argon2id — 3 iterations, 32 MB memory, 4 threads, 32-byte output key
+- **Cipher:** AES-256-GCM (authenticated encryption)
+- **Per-file format:** `salt (16 bytes) + nonce (12 bytes) + ciphertext`
+- Each file gets a fresh random salt and nonce — no two ciphertexts are alike even for identical plaintext
+
+Plaintext is never written to disk or sent over the network. Encryption and decryption happen entirely in memory on your machine.
 
 ## Future features
 
