@@ -7,10 +7,20 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var version string
+
 var rootCmd = &cobra.Command{
 	Use:   "envault",
 	Short: "An env tool",
-	Long:  "env syncing",
+	Long:  "An environment variable syncing library",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		
+		if args[0] == "-v" || args[0] == "--version" {
+			fmt.Println(version)
+			return nil
+		}
+		return nil
+	},
 }
 
 func Execute() {

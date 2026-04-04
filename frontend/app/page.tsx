@@ -1,5 +1,3 @@
-import CopyButton from "./components/CopyButton";
-
 const TERMINAL_LINES = [
   { type: "prompt", text: "envault login -p mysecret -t ghp_xxxx" },
   { type: "out",    text: "Project root: myapp" },
@@ -11,17 +9,6 @@ const TERMINAL_LINES = [
   { type: "out",    text: "Encrypted env files backed up to alice/3f9a2b..." },
 ];
 
-const QUICK_START = `# 1. Login — set password, token, create private repo
-envault login -p <password> -t <github_token>
-
-# 2. Init — mark your project root
-envault init
-
-# 3. Backup — encrypt and push .env files
-envault backup
-
-# 4. Recover — pull and decrypt on any machine
-envault recover`;
 
 
 export default function Home() {
@@ -304,39 +291,130 @@ export default function Home() {
       </section>
 
       {/* ── Quick Start ──────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-6 pb-20">
-        <div className="text-center mb-10">
-          <p className="text-[#8b5cf6] text-sm font-mono mb-2 tracking-wider">Quick Start</p>
-          <h2 className="text-2xl font-bold">Up and running in 4 commands</h2>
+      <section className="max-w-6xl mx-auto px-6 pb-24 border-t border-[#27272a] pt-20">
+        <div className="text-center mb-20">
+          <h2 className="text-4xl font-bold mb-4">Four commands. That&apos;s it.</h2>
+          <p className="text-[#71717a] text-base">No configuration files. No setup wizards. Just simple CLI commands.</p>
         </div>
-        <div className="terminal max-w-2xl mx-auto">
-          <div className="terminal-chrome justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-              <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
-              <div className="w-3 h-3 rounded-full bg-[#28c840]" />
+
+        <div className="space-y-20">
+
+          {/* Step 01 — Login: text left, terminal right */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="flex items-center gap-5 mb-6">
+                <span className="text-7xl font-bold text-[#1c1c1f] leading-none select-none">01</span>
+                <div className="flex-1 h-px bg-[#27272a]" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Login</h3>
+              <p className="text-[#71717a] text-sm leading-relaxed max-w-sm">
+                Set your encryption passphrase and GitHub token. envault creates a private backup repo and saves credentials to <code className="font-mono text-[#a78bfa] text-xs">~/.envault/config.yaml</code>.
+              </p>
             </div>
-            <CopyButton text={QUICK_START} />
+            <div className="terminal">
+              <div className="terminal-chrome">
+                <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+                <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
+                <div className="w-3 h-3 rounded-full bg-[#28c840]" />
+                <span className="ml-2 font-mono text-xs text-[#71717a]">terminal</span>
+              </div>
+              <div className="terminal-body space-y-1 font-mono text-xs leading-relaxed">
+                <div><span className="text-[#a78bfa]">$</span> <span className="text-[#fafafa]">envault login <span className="text-[#f97316]">-p</span> <span className="text-[#c4b5fd]">mysecret</span> <span className="text-[#f97316]">-t</span> <span className="text-[#c4b5fd]">ghp_xxxx</span></span></div>
+                <div className="text-[#71717a]">› Generating repo name...</div>
+                <div className="text-green-400">✓ Created private repo: alice/3f9a2b4d</div>
+                <div className="text-green-400">✓ Config saved → ~/.envault/config.yaml</div>
+              </div>
+            </div>
           </div>
-          <div className="terminal-body">
-            <pre className="text-sm whitespace-pre-wrap leading-relaxed">
-              <span className="text-[#3f3f46]"># 1. Login — set password, token, create private repo{"\n"}</span>
-              <span className="text-[#fafafa]">
-                <span className="text-[#a78bfa]">$</span>{" "}
-                envault login{" "}
-                <span className="text-[#f97316]">-p</span>{" "}
-                <span className="text-[#c4b5fd]">&lt;password&gt;</span>{" "}
-                <span className="text-[#f97316]">-t</span>{" "}
-                <span className="text-[#c4b5fd]">&lt;github_token&gt;</span>
-              </span>{"\n\n"}
-              <span className="text-[#3f3f46]"># 2. Init — mark your project root{"\n"}</span>
-              <span className="text-[#fafafa]"><span className="text-[#a78bfa]">$</span> envault init</span>{"\n\n"}
-              <span className="text-[#3f3f46]"># 3. Backup — encrypt and push .env files{"\n"}</span>
-              <span className="text-[#fafafa]"><span className="text-[#a78bfa]">$</span> envault backup</span>{"\n\n"}
-              <span className="text-[#3f3f46]"># 4. Recover — pull and decrypt on any machine{"\n"}</span>
-              <span className="text-[#fafafa]"><span className="text-[#a78bfa]">$</span> envault recover</span>
-            </pre>
+
+          {/* Step 02 — Init: terminal left, text right */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="terminal lg:order-first order-last">
+              <div className="terminal-chrome">
+                <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+                <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
+                <div className="w-3 h-3 rounded-full bg-[#28c840]" />
+                <span className="ml-2 font-mono text-xs text-[#71717a]">terminal</span>
+              </div>
+              <div className="terminal-body space-y-1 font-mono text-xs leading-relaxed">
+                <div><span className="text-[#a78bfa]">$</span> <span className="text-[#fafafa]">envault init</span></div>
+                <div className="text-[#71717a]">› Found project root: /projects/myapp</div>
+                <div className="text-green-400">✓ Created envault.json</div>
+              </div>
+            </div>
+            <div className="lg:order-last order-first">
+              <div className="flex items-center gap-5 mb-6">
+                <span className="text-7xl font-bold text-[#1c1c1f] leading-none select-none">02</span>
+                <div className="flex-1 h-px bg-[#27272a]" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Init</h3>
+              <p className="text-[#71717a] text-sm leading-relaxed max-w-sm">
+                Run once in your project root. Creates <code className="font-mono text-[#a78bfa] text-xs">envault.json</code> to mark the directory as the backup source.
+              </p>
+            </div>
           </div>
+
+          {/* Step 03 — Backup: text left, terminal right */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="flex items-center gap-5 mb-6">
+                <span className="text-7xl font-bold text-[#1c1c1f] leading-none select-none">03</span>
+                <div className="flex-1 h-px bg-[#27272a]" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Backup</h3>
+              <p className="text-[#71717a] text-sm leading-relaxed max-w-sm">
+                Finds all <code className="font-mono text-[#a78bfa] text-xs">.env*</code> files, encrypts each one with AES-256-GCM, and pushes them to your private GitHub repo. Plaintext never leaves your machine.
+              </p>
+            </div>
+            <div className="terminal">
+              <div className="terminal-chrome">
+                <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+                <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
+                <div className="w-3 h-3 rounded-full bg-[#28c840]" />
+                <span className="ml-2 font-mono text-xs text-[#71717a]">terminal</span>
+              </div>
+              <div className="terminal-body space-y-1 font-mono text-xs leading-relaxed">
+                <div><span className="text-[#a78bfa]">$</span> <span className="text-[#fafafa]">envault backup</span></div>
+                <div className="text-[#71717a]">› Scanning for .env files...</div>
+                <div className="text-[#71717a] pl-4">✓ .env</div>
+                <div className="text-[#71717a] pl-4">✓ .env.local</div>
+                <div className="text-[#71717a] pl-4">✓ config/.env</div>
+                <div className="text-green-400">✓ Encrypted 3 files</div>
+                <div className="text-green-400">✓ Pushed to alice/3f9a2b4d</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Step 04 — Recover: terminal left, text right */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="terminal lg:order-first order-last">
+              <div className="terminal-chrome">
+                <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+                <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
+                <div className="w-3 h-3 rounded-full bg-[#28c840]" />
+                <span className="ml-2 font-mono text-xs text-[#71717a]">terminal</span>
+              </div>
+              <div className="terminal-body space-y-1 font-mono text-xs leading-relaxed">
+                <div><span className="text-[#a78bfa]">$</span> <span className="text-[#fafafa]">envault recover</span></div>
+                <div className="text-[#71717a]">› Fetching alice/3f9a2b4d...</div>
+                <div className="text-green-400">✓ Decrypted .env</div>
+                <div className="text-green-400">✓ Decrypted .env.local</div>
+                <div className="text-green-400">✓ Decrypted config/.env</div>
+                <div className="text-green-400">✓ Restored 3 files</div>
+              </div>
+            </div>
+            <div className="lg:order-last order-first">
+              <div className="flex items-center gap-5 mb-6">
+                <span className="text-7xl font-bold text-[#1c1c1f] leading-none select-none">04</span>
+                <div className="flex-1 h-px bg-[#27272a]" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Recover</h3>
+              <p className="text-[#71717a] text-sm leading-relaxed max-w-sm">
+                On any new machine, run recover to pull and decrypt your .env files. No git install needed — just your passphrase.
+              </p>
+            </div>
+          </div>
+
         </div>
       </section>
 
