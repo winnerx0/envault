@@ -10,13 +10,13 @@ import (
 var version string
 
 var rootCmd = &cobra.Command{
-	Use:   "envault",
+	Use:   "envault <version>",
 	Short: "An env tool",
 	Long:  "An environment variable syncing library",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		
-		if args[0] == "-v" || args[0] == "--version" {
-			fmt.Println(version)
+		if args[0] == "version" {
+			fmt.Printf("v%s\n", version)
 			return nil
 		}
 		return nil
