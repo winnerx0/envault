@@ -15,12 +15,18 @@ var rootCmd = &cobra.Command{
 	Long:  "An environment variable syncing library",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		
-		if args[0] == "version" {
+		v, _ := cmd.Flags().GetBool("version")
+		
+		if v{
 			fmt.Printf("v%s\n", version)
 			return nil
 		}
 		return nil
 	},
+}
+
+func init(){
+	rootCmd.Flags().BoolP("version", "v", false, "Show version")
 }
 
 func Execute() {
