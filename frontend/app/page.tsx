@@ -1,74 +1,14 @@
 import CopyButton from "./components/CopyButton";
 
-const STEPS = [
-  {
-    num: "01",
-    label: "Login",
-    cmd: "envault login -p <password> -t <token>",
-    desc: "Set your encryption passphrase and GitHub token. A private backup repo is created automatically and credentials are saved to ~/.envault/config.yaml.",
-  },
-  {
-    num: "02",
-    label: "Init",
-    cmd: "envault init",
-    desc: "Creates envault.json in your project root, marking it as the source of truth for all encrypted backups in that project.",
-  },
-  {
-    num: "03",
-    label: "Backup",
-    cmd: "envault backup",
-    desc: "All .env files are encrypted locally and pushed to your private GitHub repo via the Git Data API. Plaintext never leaves your machine.",
-  },
-  {
-    num: "04",
-    label: "Recover",
-    cmd: "envault recover",
-    desc: "On any machine, download and decrypt your .env files using your passphrase. Back in seconds, no git required.",
-  },
-];
-
-const FEATURES = [
-  {
-    glyph: "❏",
-    title: "AES-256-GCM",
-    desc: "Military-grade authenticated encryption. Each file is independently encrypted.",
-  },
-  {
-    glyph: "◈",
-    title: "Argon2id KDF",
-    desc: "Memory-hard key derivation makes brute force attacks computationally infeasible.",
-  },
-  {
-    glyph: "⬡",
-    title: "One repo, all projects",
-    desc: "All encrypted backups land in one private repo, organized under each project's folder name.",
-  },
-  {
-    glyph: "◎",
-    title: "Zero plaintext upload",
-    desc: "Encryption happens entirely on your machine. GitHub only ever sees ciphertext.",
-  },
-  {
-    glyph: "◻",
-    title: "Per-file unique salt",
-    desc: "Every file gets a fresh 16-byte random salt and nonce. No two ciphertexts are alike.",
-  },
-  {
-    glyph: "△",
-    title: "Git Data API",
-    desc: "Pushes directly via the GitHub API. No local git binary needed on the target machine.",
-  },
-];
-
 const TERMINAL_LINES = [
   { type: "prompt", text: "envault login -p mysecret -t ghp_xxxx" },
-  { type: "out", text: "Project root: myapp" },
-  { type: "out", text: "Created private backup repo: alice/3f9a2b..." },
-  { type: "out", text: "Config saved to ~/.envault/config.yaml" },
+  { type: "out",    text: "Project root: myapp" },
+  { type: "out",    text: "Created private backup repo: alice/3f9a2b..." },
+  { type: "out",    text: "Config saved to ~/.envault/config.yaml" },
   { type: "prompt", text: "envault init" },
-  { type: "out", text: "Initialized envault project in /projects/myapp" },
+  { type: "out",    text: "Initialized envault project in /projects/myapp" },
   { type: "prompt", text: "envault backup" },
-  { type: "out", text: "Encrypted env files backed up to alice/3f9a2b..." },
+  { type: "out",    text: "Encrypted env files backed up to alice/3f9a2b..." },
 ];
 
 const QUICK_START = `# 1. Login — set password, token, create private repo
@@ -83,172 +23,293 @@ envault backup
 # 4. Recover — pull and decrypt on any machine
 envault recover`;
 
+
 export default function Home() {
   return (
-    <div className="min-h-screen relative z-10">
+    <div className="min-h-screen bg-[#09090b] text-[#fafafa] font-sans">
 
-      {/* ── Nav ─────────────────────────────────────────────── */}
-      <nav className="sticky top-0 z-50 border-b border-[#1c3d5c] bg-[#091520]/92 backdrop-blur-md">
+      {/* ── Nav ──────────────────────────────────────────────── */}
+      <nav className="sticky top-0 z-50 border-b border-[#27272a] bg-[#09090b]/85 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <span className="font-display text-base tracking-widest text-[#4db8ff]">
-            ENVAULT
-          </span>
+          <span className="font-semibold text-sm tracking-widest text-white">ENVAULT</span>
           <a
             href="https://github.com/winnerx0/envault"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono text-xs text-[#5a7d99] hover:text-[#4db8ff] transition-colors"
+            className="text-sm text-[#71717a] hover:text-white transition-colors"
           >
             github ↗
           </a>
         </div>
       </nav>
 
-      {/* ── Hero ────────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-6 pt-20 pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <section className="max-w-4xl mx-auto px-6 pt-24 pb-20 text-center">
 
-          {/* Left */}
-          <div>
-            <div className="fade-up fade-up-1 inline-flex items-center gap-2 bg-[#0d1e2e] border border-[#1c3d5c] rounded-sm px-3 py-1 text-xs font-mono text-[#5a7d99] mb-8">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#4db8ff] inline-block animate-pulse" />
-              AES-256-GCM · Argon2id · Open source
-            </div>
+        <div className="fade-up fade-up-1 inline-flex items-center gap-2 bg-[#18181b] border border-[#27272a] rounded-full px-4 py-1.5 text-xs text-[#71717a] mb-8 font-mono">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#8b5cf6] inline-block animate-pulse" />
+          Open source · AES-256-GCM · Argon2id
+        </div>
 
-            <h1 className="fade-up fade-up-2 font-display text-[clamp(40px,7.5vw,72px)] leading-[1.1] tracking-wide mb-6">
-              SECURE<br />
-              YOUR<br />
-              <span className="text-[#4db8ff]">.ENV</span><br />
-              FILES
-            </h1>
+        <h1 className="fade-up fade-up-2 text-[clamp(36px,6.5vw,68px)] font-bold leading-[1.08] tracking-tight mb-6">
+          The{" "}
+          <code className="font-mono text-[#a78bfa] not-italic">.env</code>{" "}
+          backup tool<br />
+          you&apos;ll actually trust.
+        </h1>
 
-            <p className="fade-up fade-up-3 text-[#5a7d99] text-lg leading-relaxed max-w-sm mb-10 font-sans">
-              Encrypt and back up your{" "}
-              <code className="font-mono text-sm text-[#c8dff0] bg-[#0d1e2e] px-1.5 py-0.5 rounded-sm border border-[#1c3d5c]">
-                .env
-              </code>{" "}
-              files to a private GitHub repo. Your secrets never leave your machine in plaintext.
-            </p>
+        <p className="fade-up fade-up-3 text-[#71717a] text-lg leading-relaxed max-w-xl mx-auto mb-10">
+          Encrypt and back up your .env files to a private GitHub repo.
+          AES-256-GCM encryption — secrets never leave your machine in plaintext.
+        </p>
 
-            <div className="fade-up fade-up-4 flex flex-wrap gap-3">
-              <code className="font-mono text-xs bg-[#0d1e2e] border border-[#1c3d5c] text-[#4db8ff] px-4 py-2.5 rounded-sm select-all">
-                go install github.com/winnerx0/envault/cmd/envault@latest
-              </code>
-            </div>
+        <div className="fade-up fade-up-4 flex flex-col items-center gap-2 mb-16">
+          <code className="font-mono text-xs text-[#a78bfa] bg-[#111117] border border-[#27272a] rounded-lg px-4 py-2.5 select-all">
+            curl -fsSL https://raw.githubusercontent.com/winnerx0/envault/main/install.sh | sh
+          </code>
+          <p className="font-mono text-xs text-[#3f3f46]">
+            or: go install github.com/winnerx0/envault/cmd/envault@latest
+          </p>
+        </div>
+
+        <div className="fade-up fade-up-5 terminal text-left max-w-2xl mx-auto">
+          <div className="terminal-chrome">
+            <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+            <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
+            <div className="w-3 h-3 rounded-full bg-[#28c840]" />
+            <span className="ml-2 font-mono text-xs text-[#71717a]">zsh — envault demo</span>
           </div>
-
-          {/* Right — animated terminal */}
-          <div className="terminal lg:mt-2">
-            <div className="terminal-chrome">
-              <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-              <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
-              <div className="w-3 h-3 rounded-full bg-[#28c840]" />
-              <span className="ml-2 font-mono text-xs text-[#5a7d99]">zsh — envault demo</span>
-            </div>
-            <div className="terminal-body space-y-0.5 min-h-[200px]">
-              {TERMINAL_LINES.map((line, i) => (
-                <div
-                  key={i}
-                  className={`term-line flex gap-2 ${
-                    line.type === "out" ? "text-[#5a7d99]" : "text-[#c8dff0]"
+          <div className="terminal-body space-y-0.5 min-h-[180px]">
+            {TERMINAL_LINES.map((line, i) => (
+              <div
+                key={i}
+                className={`term-line flex gap-2 ${
+                  line.type === "out" ? "text-[#71717a]" : "text-[#fafafa]"
+                }`}
+              >
+                <span
+                  className={`select-none shrink-0 ${
+                    line.type === "prompt" ? "text-[#a78bfa]" : "text-[#3f3f46]"
                   }`}
                 >
-                  <span
-                    className={`select-none shrink-0 ${
-                      line.type === "prompt" ? "text-[#4db8ff]" : "text-[#1c3d5c]"
-                    }`}
-                  >
-                    {line.type === "prompt" ? "$" : "›"}
-                  </span>
-                  <span>{line.text}</span>
-                </div>
-              ))}
-              <div className="term-line flex gap-2">
-                <span className="text-[#4db8ff] select-none">$</span>
-                <span className="cursor-blink" />
+                  {line.type === "prompt" ? "$" : "›"}
+                </span>
+                <span>{line.text}</span>
               </div>
+            ))}
+            <div className="term-line flex gap-2">
+              <span className="text-[#a78bfa] select-none">$</span>
+              <span className="cursor-blink" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Feature Bento Rows ───────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-6 py-20">
+        <div className="rounded-2xl overflow-hidden border border-[#27272a] divide-y divide-[#27272a]">
+
+          {/* Row 1 — AES-256-GCM */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[380px] divide-y lg:divide-y-0 lg:divide-x divide-[#27272a]">
+            <div className="bg-[#4c1d95] p-10 lg:p-14 flex flex-col justify-center">
+              <span className="inline-block bg-white/10 rounded-full px-3 py-1 text-[11px] text-white/60 mb-6 tracking-wider uppercase w-fit">
+                Encryption
+              </span>
+              <h3 className="text-[clamp(24px,3vw,34px)] font-bold text-white leading-tight mb-3">
+                AES-256-GCM<br />encryption
+              </h3>
+              <p className="text-white/60 text-sm leading-relaxed max-w-xs">
+                Military-grade authenticated encryption. Each .env file is independently encrypted with a unique 16-byte nonce before touching the network.
+              </p>
+            </div>
+            <div className="bg-[#0f0f14] p-10 lg:p-14 flex items-center justify-center">
+              <div className="w-full max-w-xs">
+                <div className="bg-[#111117] border border-[#27272a] rounded-xl p-5 font-mono text-xs">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="w-2 h-2 rounded-full bg-[#8b5cf6]" />
+                    <span className="text-[#71717a] text-[10px] tracking-wider">myapp/.env.enc</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div>
+                      <p className="text-[#52525b] text-[9px] tracking-widest uppercase mb-1">salt · 16 bytes</p>
+                      <p className="text-[#6d28d9] text-[10px] break-all leading-5">3a8f2b91c4d7e6f0a1b2c3d4e5f6a7b8</p>
+                    </div>
+                    <div>
+                      <p className="text-[#52525b] text-[9px] tracking-widest uppercase mb-1">nonce · 12 bytes</p>
+                      <p className="text-[#7c3aed] text-[10px] break-all leading-5">9e1f3c7d2a5b8e4fc0d1e2f3</p>
+                    </div>
+                    <div>
+                      <p className="text-[#52525b] text-[9px] tracking-widest uppercase mb-1">ciphertext</p>
+                      <p className="text-[#a78bfa] text-[10px] break-all leading-5">f2c1b3d4e5a6f7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2…</p>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-[#3f3f46] text-[10px] text-center mt-3 font-mono">plaintext never stored</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Row 2 — One command backup */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[380px] divide-y lg:divide-y-0 lg:divide-x divide-[#27272a]">
+            <div className="bg-[#0f0f14] p-10 lg:p-14 flex items-center justify-center">
+              <div className="w-full max-w-xs space-y-3">
+                <div className="bg-[#111117] border border-[#27272a] rounded-xl p-4 font-mono text-xs">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="w-2 h-2 rounded-full bg-green-400" />
+                    <span className="text-[#71717a] text-[10px]">envault.json</span>
+                  </div>
+                  <pre className="text-[#a78bfa] text-[11px] leading-relaxed">{`{
+  "name": "myapp",
+  "version": "1.0"
+}`}</pre>
+                </div>
+                <div className="bg-[#111117] border border-[#27272a] rounded-xl p-4 font-mono text-xs">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="w-2 h-2 rounded-full bg-blue-400" />
+                    <span className="text-[#71717a] text-[10px]">~/.envault/config.yaml</span>
+                  </div>
+                  <div className="space-y-1.5 text-[11px]">
+                    <div className="flex gap-2">
+                      <span className="text-[#71717a]">token:</span>
+                      <span className="text-[#fafafa]">ghp_xxxx</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-[#71717a]">passphrase:</span>
+                      <span className="text-[#52525b]">••••••••</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-[#71717a]">repo:</span>
+                      <span className="text-[#fafafa]">alice/3f9a2b</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#312e81] p-10 lg:p-14 flex flex-col justify-center">
+              <span className="inline-block bg-white/10 rounded-full px-3 py-1 text-[11px] text-white/60 mb-6 tracking-wider uppercase w-fit">
+                Backup
+              </span>
+              <h3 className="text-[clamp(24px,3vw,34px)] font-bold text-white leading-tight mb-3">
+                One command<br />backup
+              </h3>
+              <p className="text-white/60 text-sm leading-relaxed max-w-xs">
+                Run{" "}
+                <code className="font-mono bg-white/10 px-1.5 py-0.5 rounded text-white/80 text-[11px]">
+                  envault backup
+                </code>{" "}
+                and every .env file is encrypted and pushed to your private GitHub repo instantly.
+              </p>
+            </div>
+          </div>
+
+          {/* Row 3 — Argon2id */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[380px] divide-y lg:divide-y-0 lg:divide-x divide-[#27272a]">
+            <div className="bg-[#5b21b6] p-10 lg:p-14 flex flex-col justify-center">
+              <span className="inline-block bg-white/10 rounded-full px-3 py-1 text-[11px] text-white/60 mb-6 tracking-wider uppercase w-fit">
+                Key Derivation
+              </span>
+              <h3 className="text-[clamp(24px,3vw,34px)] font-bold text-white leading-tight mb-3">
+                Argon2id<br />key derivation
+              </h3>
+              <p className="text-white/60 text-sm leading-relaxed max-w-xs">
+                Memory-hard KDF with 3 iterations and 32 MB of memory. Brute force attacks become computationally infeasible even with dedicated hardware.
+              </p>
+            </div>
+            <div className="bg-[#0f0f14] p-10 lg:p-14 flex items-center justify-center">
+              <div className="flex flex-col items-center gap-2 w-full max-w-[220px]">
+                <div className="w-full bg-[#111117] border border-[#27272a] rounded-xl px-5 py-3 text-center">
+                  <p className="text-[#52525b] text-[9px] tracking-widest uppercase mb-1">INPUT</p>
+                  <p className="text-[#fafafa] font-mono text-xs">passphrase</p>
+                </div>
+                <div className="flex flex-col items-center gap-0.5">
+                  <div className="w-px h-4 bg-[#27272a]" />
+                  <div className="bg-[#1a1040] border border-[#7c3aed] rounded-full px-4 py-1.5 text-[11px] text-[#a78bfa] font-mono whitespace-nowrap">
+                    Argon2id · 3 iters · 32 MB
+                  </div>
+                  <div className="w-px h-4 bg-[#27272a]" />
+                </div>
+                <div className="w-full bg-[#111117] border border-[#8b5cf6]/40 rounded-xl px-5 py-3 text-center">
+                  <p className="text-[#52525b] text-[9px] tracking-widest uppercase mb-1">KEY</p>
+                  <p className="text-[#a78bfa] font-mono text-xs">256-bit AES key</p>
+                </div>
+                <div className="flex flex-col items-center gap-0.5">
+                  <div className="w-px h-4 bg-[#27272a]" />
+                  <div className="bg-[#111117] border border-[#27272a] rounded-full px-4 py-1.5 text-[11px] text-[#71717a] font-mono whitespace-nowrap">
+                    AES-256-GCM + nonce
+                  </div>
+                  <div className="w-px h-4 bg-[#27272a]" />
+                </div>
+                <div className="w-full bg-[#111117] border border-[#27272a] rounded-xl px-5 py-3 text-center">
+                  <p className="text-[#52525b] text-[9px] tracking-widest uppercase mb-1">OUTPUT</p>
+                  <p className="text-[#6d28d9] font-mono text-xs">encrypted .env</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Row 4 — Recover anywhere */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[380px] divide-y lg:divide-y-0 lg:divide-x divide-[#27272a]">
+            <div className="bg-[#0f0f14] p-10 lg:p-14 flex items-center justify-center">
+              <div className="w-full max-w-xs">
+                <div className="bg-[#111117] border border-[#27272a] rounded-xl overflow-hidden font-mono text-xs">
+                  <div className="bg-[#18181b] px-4 py-2.5 flex items-center gap-2 border-b border-[#27272a]">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+                    <span className="ml-1 text-[#71717a] text-[10px]">new machine</span>
+                  </div>
+                  <div className="p-4 space-y-2 text-[11px] leading-relaxed">
+                    <div className="flex gap-2">
+                      <span className="text-[#a78bfa]">$</span>
+                      <span className="text-[#fafafa]">envault recover</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-[#3f3f46]">›</span>
+                      <span className="text-[#71717a]">Fetching alice/3f9a2b...</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-[#3f3f46]">›</span>
+                      <span className="text-[#71717a]">Decrypting myapp/.env.enc</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-[#3f3f46]">›</span>
+                      <span className="text-[#71717a]">Decrypting myapp/.env.local.enc</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-green-400">✓</span>
+                      <span className="text-green-400">Restored 2 files</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#2e1065] p-10 lg:p-14 flex flex-col justify-center">
+              <span className="inline-block bg-white/10 rounded-full px-3 py-1 text-[11px] text-white/60 mb-6 tracking-wider uppercase w-fit">
+                Recovery
+              </span>
+              <h3 className="text-[clamp(24px,3vw,34px)] font-bold text-white leading-tight mb-3">
+                Recover<br />anywhere
+              </h3>
+              <p className="text-white/60 text-sm leading-relaxed max-w-xs">
+                New machine, zero setup. Run{" "}
+                <code className="font-mono bg-white/10 px-1.5 py-0.5 rounded text-white/80 text-[11px]">
+                  envault recover
+                </code>{" "}
+                and your .env files are back in seconds. No git install required.
+              </p>
             </div>
           </div>
 
         </div>
       </section>
 
-      {/* ── Divider ─────────────────────────────────────────── */}
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="border-t border-[#1c3d5c]" />
-      </div>
-
-      {/* ── How it works ────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <p className="blueprint-label">How it works</p>
-        <h2 className="font-display text-4xl tracking-wide mb-14 mt-3">
-          FOUR COMMANDS
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[#1c3d5c]">
-          {STEPS.map((step) => (
-            <div
-              key={step.num}
-              className="bg-[#091520] p-6 hover:bg-[#0c1f30] transition-colors group"
-            >
-              <div className="font-display text-5xl text-[#122333] group-hover:text-[#4db8ff]/10 transition-colors mb-3 leading-none">
-                {step.num}
-              </div>
-              <p className="font-mono text-[#4db8ff] text-xs uppercase tracking-widest mb-2">
-                {step.label}
-              </p>
-              <code className="block font-mono text-xs text-[#c8dff0] bg-[#0d1e2e] border border-[#1c3d5c] px-3 py-2 rounded-sm mb-3 break-all leading-relaxed">
-                $ {step.cmd}
-              </code>
-              <p className="text-[#5a7d99] text-sm leading-relaxed font-sans">
-                {step.desc}
-              </p>
-            </div>
-          ))}
+      {/* ── Quick Start ──────────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-6 pb-20">
+        <div className="text-center mb-10">
+          <p className="text-[#8b5cf6] text-sm font-mono mb-2 tracking-wider">Quick Start</p>
+          <h2 className="text-2xl font-bold">Up and running in 4 commands</h2>
         </div>
-      </section>
-
-      {/* ── Divider ─────────────────────────────────────────── */}
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="border-t border-[#1c3d5c]" />
-      </div>
-
-      {/* ── Features ────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <p className="blueprint-label">Features</p>
-        <h2 className="font-display text-4xl tracking-wide mb-14 mt-3">
-          BUILT SECURE
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[#1c3d5c]">
-          {FEATURES.map((f, i) => (
-            <div
-              key={i}
-              className="bg-[#091520] p-6 hover:bg-[#0c1f30] transition-colors group"
-            >
-              <span className="font-mono text-lg text-[#1c3d5c] group-hover:text-[#4db8ff] transition-colors block mb-3">
-                {f.glyph}
-              </span>
-              <h3 className="font-mono text-sm text-[#c8dff0] mb-1.5">{f.title}</h3>
-              <p className="text-[#5a7d99] text-sm leading-relaxed font-sans">{f.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Divider ─────────────────────────────────────────── */}
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="border-t border-[#1c3d5c]" />
-      </div>
-
-      {/* ── Quick Start ─────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <p className="blueprint-label">Quick Start</p>
-        <h2 className="font-display text-4xl tracking-wide mb-10 mt-3">
-          GET RUNNING
-        </h2>
-
-        <div className="terminal max-w-2xl">
+        <div className="terminal max-w-2xl mx-auto">
           <div className="terminal-chrome justify-between">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
@@ -259,74 +320,35 @@ export default function Home() {
           </div>
           <div className="terminal-body">
             <pre className="text-sm whitespace-pre-wrap leading-relaxed">
-              <span className="text-[#1c3d5c]"># 1. Login — set password, token, create private repo{"\n"}</span>
-              <span className="text-[#c8dff0]">
-                <span className="text-[#4db8ff]">$</span>{" "}
+              <span className="text-[#3f3f46]"># 1. Login — set password, token, create private repo{"\n"}</span>
+              <span className="text-[#fafafa]">
+                <span className="text-[#a78bfa]">$</span>{" "}
                 envault login{" "}
-                <span className="text-[#ff7043]">-p</span>{" "}
-                <span className="text-[#7ec8e3]">&lt;password&gt;</span>{" "}
-                <span className="text-[#ff7043]">-t</span>{" "}
-                <span className="text-[#7ec8e3]">&lt;github_token&gt;</span>
+                <span className="text-[#f97316]">-p</span>{" "}
+                <span className="text-[#c4b5fd]">&lt;password&gt;</span>{" "}
+                <span className="text-[#f97316]">-t</span>{" "}
+                <span className="text-[#c4b5fd]">&lt;github_token&gt;</span>
               </span>{"\n\n"}
-              <span className="text-[#1c3d5c]"># 2. Init — mark your project root{"\n"}</span>
-              <span className="text-[#c8dff0]"><span className="text-[#4db8ff]">$</span> envault init</span>{"\n\n"}
-              <span className="text-[#1c3d5c]"># 3. Backup — encrypt and push .env files{"\n"}</span>
-              <span className="text-[#c8dff0]"><span className="text-[#4db8ff]">$</span> envault backup</span>{"\n\n"}
-              <span className="text-[#1c3d5c]"># 4. Recover — pull and decrypt on any machine{"\n"}</span>
-              <span className="text-[#c8dff0]"><span className="text-[#4db8ff]">$</span> envault recover</span>
+              <span className="text-[#3f3f46]"># 2. Init — mark your project root{"\n"}</span>
+              <span className="text-[#fafafa]"><span className="text-[#a78bfa]">$</span> envault init</span>{"\n\n"}
+              <span className="text-[#3f3f46]"># 3. Backup — encrypt and push .env files{"\n"}</span>
+              <span className="text-[#fafafa]"><span className="text-[#a78bfa]">$</span> envault backup</span>{"\n\n"}
+              <span className="text-[#3f3f46]"># 4. Recover — pull and decrypt on any machine{"\n"}</span>
+              <span className="text-[#fafafa]"><span className="text-[#a78bfa]">$</span> envault recover</span>
             </pre>
           </div>
         </div>
       </section>
 
-      {/* ── Divider ─────────────────────────────────────────── */}
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="border-t border-[#1c3d5c]" />
-      </div>
-
-      {/* ── Coming Soon ─────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <p className="blueprint-label">Coming Soon</p>
-        <h2 className="font-display text-4xl tracking-wide mb-10 mt-3">
-          WHAT&apos;S NEXT
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
-          <div className="border border-[#1c3d5c] rounded-sm p-5 flex items-start gap-3 hover:border-[#2a5878] hover:bg-[#0c1f30] transition-colors">
-            <span className="font-mono text-xs text-[#1c3d5c] mt-0.5 shrink-0">[ ]</span>
-            <div>
-              <p className="font-mono text-sm text-[#c8dff0] mb-1.5">Selective backup</p>
-              <p className="text-[#5a7d99] text-xs leading-relaxed font-sans">
-                <code className="text-[#4db8ff]/60 font-mono">envault backup .env.local</code>
-                {" "}— target specific files instead of all{" "}
-                <code className="font-mono text-[#5a7d99]">.env*</code>
-              </p>
-            </div>
-          </div>
-          <div className="border border-[#1c3d5c] rounded-sm p-5 flex items-start gap-3 hover:border-[#2a5878] hover:bg-[#0c1f30] transition-colors">
-            <span className="font-mono text-xs text-[#1c3d5c] mt-0.5 shrink-0">[ ]</span>
-            <div>
-              <p className="font-mono text-sm text-[#c8dff0] mb-1.5">Selective recover</p>
-              <p className="text-[#5a7d99] text-xs leading-relaxed font-sans">
-                <code className="text-[#4db8ff]/60 font-mono">envault recover .env.production</code>
-                {" "}— restore a single file on demand
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Footer ──────────────────────────────────────────── */}
-      <footer className="border-t border-[#1c3d5c]">
+      {/* ── Footer ───────────────────────────────────────────── */}
+      <footer className="border-t border-[#27272a]">
         <div className="max-w-6xl mx-auto px-6 py-8 flex items-center justify-between">
-          <span className="font-display text-sm text-[#122333] tracking-widest">
-            ENVAULT
-          </span>
+          <span className="font-semibold text-sm text-[#3f3f46] tracking-widest">ENVAULT</span>
           <a
             href="https://github.com/winnerx0/envault"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono text-xs text-[#5a7d99] hover:text-[#4db8ff] transition-colors"
+            className="font-mono text-xs text-[#71717a] hover:text-[#a78bfa] transition-colors"
           >
             github.com/winnerx0/envault ↗
           </a>
